@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load data from a CSV file
+data = pd.read_csv('International_Report_Passengers.csv')
+
+# Pre-processing: Handle missing values
+data = data.dropna()
+
+# Visualization Dashboard
+def visualize_data(data):
+    # Visualize histo
+    numerical_columns = data.select_dtypes(include=['int64', 'float64']).columns
+    for col in numerical_columns:
+        plt.figure(figsize=(8, 6))
+        sns.histplot(data[col], kde=True)
+        plt.title(f'Histogram of {col}')
+        plt.xlabel(col)
+        plt.ylabel('Frequency')
+        plt.show()
+
+    # Visualize box plots for categorical columns
+    categorical_columns = data.select_dtypes(include=['object']).columns
+    for col in categorical_columns:
+        plt.figure(figsize=(8, 6))
+        counts_cool = data[col].value_counts(normalize=True)
+        counts_cool.head(15).plot(kind = "barh")
+        counts_cool.tail(15).plot(kind = "barh")
+        plt.title(f'Plot bar of {col}')
+        plt.xlabel(col)
+        plt.show()
+
+# Call the visualization function
+visualize_data(data)
